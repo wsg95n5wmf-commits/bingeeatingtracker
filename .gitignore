@@ -1,0 +1,22 @@
+# Book / source material — never commit
+offline_resources/
+
+# Exported user data — never commit
+*.export.json
+exports/
+
+# Dependencies & build
+node_modules/
+dist/
+dist-ssr/
+coverage/
+*.local
+
+# Editor & OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Build output
+dist/
