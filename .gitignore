@@ -20,3 +20,6 @@ coverage/
 
 # Build output
 dist/
+
+# TypeScript incremental build info
+*.tsbuildinfo
