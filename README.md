@@ -71,6 +71,17 @@ features. Each of these works against something the program is trying to undo �
 
 Reminders are not in this build. See [SPEC.md](SPEC.md) §1 for the plan.
 
+## Working on this with an AI agent
+
+The rules live in [AGENTS.md](AGENTS.md) and nowhere else. Codex, Cursor, Zed, Aider and Jules
+read it natively; other tools get a thin generated pointer. Regenerate the pointers with:
+
+```bash
+sh .agents/scripts/sync-agents.sh
+```
+
+See [.agents/README.md](.agents/README.md) for the layout.
+
 ## Architecture
 
 Clean architecture with unidirectional data flow — `domain/` (pure, no React or Dexie) ←

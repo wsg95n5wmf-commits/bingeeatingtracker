@@ -5,6 +5,8 @@ import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
   base: './',
+  // Canonical dev-server port. Tool-specific launch configs derive from this.
+  server: { port: 5173 },
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },

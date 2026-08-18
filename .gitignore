@@ -18,6 +18,10 @@ coverage/
 !.vscode/extensions.json
 .idea/
 
+# Tool-specific runtime config. Regenerate with .agents/scripts/sync-agents.sh
+# The portable equivalents are `npm run dev` and vite.config.ts `server.port`.
+.claude/
+
 # Build output
 dist/
 
