@@ -1,0 +1,43 @@
+.next { text-align: center; padding: 6px 0; }
+.nextLabel { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-faint); }
+.nextName { font-size: 1.5rem; font-weight: 600; margin: 3px 0; }
+.nextWhen { color: var(--ink-soft); }
+.overdue { color: var(--notice); }
+
+.timeline { display: flex; flex-direction: column; gap: 2px; }
+
+.slot {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.slot:last-child { border-bottom: 0; }
+.slotTime { font-family: var(--font-record); font-size: 0.8125rem; color: var(--ink-soft); }
+.eaten .slotName { color: var(--ink-faint); text-decoration: line-through; }
+.missed .slotTime { color: var(--notice); }
+.tick { font-size: 0.9rem; color: var(--accent); }
+.pendingMark { font-size: 0.9rem; color: var(--rule-strong); }
+
+.prompts { display: flex; flex-direction: column; gap: 8px; }
+
+.prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 13px 15px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.9375rem;
+}
+
+.promptAccent { border-color: var(--accent); background: var(--accent-soft); }
+.chev { color: var(--ink-faint); }
+.phase { display: flex; align-items: center; gap: 8px; }

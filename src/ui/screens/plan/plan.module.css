@@ -1,0 +1,48 @@
+.item {
+  display: grid;
+  grid-template-columns: 104px 1fr 44px;
+  gap: 8px;
+  align-items: center;
+}
+
+.item input[type='time'] { padding: 8px; }
+.item input[type='text'] { padding: 8px 10px; }
+
+.remove {
+  min-height: 40px;
+  padding: 8px;
+  color: var(--ink-faint);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.remove:hover { border-color: var(--rule-strong); color: var(--mark); }
+
+.gap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0 4px 8px;
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  border-left: 2px dotted var(--rule-strong);
+  margin-left: 44px;
+}
+
+.gapBreach { color: var(--notice); border-left-color: var(--notice); font-weight: 500; }
+.gapException { color: var(--ink-faint); }
+
+.kind {
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 0.6875rem;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  min-height: 0;
+}
+
+.timing { font-size: 0.75rem; color: var(--ink-faint); }
