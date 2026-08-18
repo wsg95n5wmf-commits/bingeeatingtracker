@@ -1,0 +1,9 @@
+.chart { width: 100%; height: auto; display: block; }
+.grid { stroke: var(--rule); stroke-width: 1; }
+.axis { fill: var(--ink-faint); font-size: 9px; font-family: var(--font-record); }
+.line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; }
+.dot { fill: var(--accent); }
+
+.entryRow { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+.unit { font-size: 0.8125rem; color: var(--ink-faint); }
+.offList { font-size: 0.8125rem; color: var(--ink-faint); }
