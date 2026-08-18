@@ -1,0 +1,51 @@
+.progress { display: flex; gap: 3px; }
+.tick { flex: 1; height: 3px; border-radius: 2px; background: var(--rule); }
+.tickDone { background: var(--accent); }
+
+.dayRecord {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  font-size: 0.875rem;
+}
+
+.dayRow {
+  display: grid;
+  grid-template-columns: 46px 1fr 20px 30px;
+  gap: 6px;
+  padding: 7px 10px;
+  border-top: 1px solid var(--rule);
+}
+
+.dayRow:first-child { border-top: 0; }
+.chain { background: var(--mark-soft); }
+.rowTime { font-family: var(--font-record); font-size: 0.75rem; color: var(--ink-soft); }
+.rowStar { color: var(--mark); text-align: center; }
+.rowVl { font-family: var(--font-record); font-size: 0.6875rem; color: var(--mark); text-align: center; }
+.rowContext { font-size: 0.75rem; color: var(--ink-soft); font-style: italic; }
+
+.counter { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.counterControls { display: flex; align-items: center; gap: 4px; }
+.counterButton { min-height: 38px; min-width: 38px; padding: 0; }
+.counterValue { min-width: 30px; text-align: center; font-variant-numeric: tabular-nums; font-size: 1.05rem; }
+
+.compare { border-left: 3px solid var(--accent); padding-left: 12px; }
+.compareMismatch { border-left-color: var(--notice); }
+.compareRow { display: flex; justify-content: space-between; font-size: 0.875rem; }
+
+.toggleRow { display: flex; gap: 8px; }
+.toggle {
+  flex: 1;
+  padding: 11px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  cursor: pointer;
+  min-height: 44px;
+}
+.toggleOn { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+.nav { display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+.summaryLine { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--rule); }
+.summaryLine:last-child { border-bottom: 0; }
+.summaryValue { font-variant-numeric: tabular-nums; font-weight: 600; }
