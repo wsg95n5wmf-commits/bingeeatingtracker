@@ -4,6 +4,7 @@ import { App } from './app/App';
 import { RepositoriesProvider } from './app/repositories';
 import { db } from './data/db/database';
 import { createRepositories } from './data/repositories';
+import { requestPersistentStorage } from './app/storagePersistence';
 import './ui/theme/global.css';
 
 const root = document.getElementById('root');
@@ -24,6 +25,9 @@ function render(): void {
 // Fix the program start date on first run before anything reads it. Rendering
 // from the callback rather than awaiting at the top level keeps the bundle
 // within the browser baseline, which has no top-level await.
+// Best-effort, and deliberately not awaited: it must never delay first paint.
+void requestPersistentStorage();
+
 repositories.profile
   .ensure()
   .catch(() => undefined)

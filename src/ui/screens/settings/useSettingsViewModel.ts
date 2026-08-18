@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useRepositories } from '@/app/repositories';
 import { db } from '@/data/db/database';
@@ -8,12 +8,18 @@ import type { Phase } from '@/domain/model/phase';
 import type { Profile } from '@/domain/model/profile';
 import type { HeightUnit, WeightUnit } from '@/domain/model/units';
 import { backupFilename, parseBackup, BackupFormatError } from '@/domain/usecases/backup';
+import { storageStatus, type StorageStatus } from '@/app/storagePersistence';
 
 export function useSettingsViewModel() {
   const { profile } = useRepositories();
   const current = useLiveQuery(() => profile.get());
   const [message, setMessage] = useState<string | undefined>(undefined);
+  const [storage, setStorage] = useState<StorageStatus>('unknown');
   const fileInput = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    void storageStatus().then(setStorage);
+  }, []);
 
   const update = useCallback(
     async (changes: Partial<Profile>) => {
@@ -55,6 +61,7 @@ export function useSettingsViewModel() {
   return {
     profile: current,
     message,
+    storage,
     fileInput,
     setPhase: (phase: Phase) => void update({ phase }),
     setWeighDay: (weighDay: Weekday) => void update({ weighDay }),

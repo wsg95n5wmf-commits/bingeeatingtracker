@@ -42,26 +42,42 @@ npm run build
 ## Putting it on your phone
 
 The app is a PWA: once installed to the home screen it runs fully offline, with no computer
-involved.
+involved. It must be served over **HTTPS** — a service worker will not register otherwise, and
+without it there is no offline mode.
 
-1. Deploy the contents of `dist/` to any static host (see below).
-2. Open the URL in Safari on your iPhone.
-3. Share → **Add to Home Screen**.
-4. Open it once while online so the service worker caches everything. After that it works offline.
+### 1. Host it
 
-Data lives per-origin, so keep the same URL — moving hosts starts you with an empty database.
-Use export/import to carry records across.
+The build is static files with no backend, so any free tier works.
 
-### Free hosting
+**GitHub Pages (automated).** `.github/workflows/deploy.yml` builds and publishes on every push
+to `main`:
 
-The build is static files with no backend, so any of these work on their free tier:
+1. Create a repository on GitHub and push this one to it.
+2. Repository **Settings → Pages → Source → GitHub Actions**.
+3. Push. The workflow runs the tests, builds, and deploys to
+   `https://<user>.github.io/<repo>/`.
 
-- **Cloudflare Pages** — connect the repo, build `npm run build`, output `dist`
-- **Netlify** — same settings
-- **GitHub Pages** — push `dist/` to a `gh-pages` branch
+**Cloudflare Pages / Netlify.** Connect the repository; build command `npm run build`, output
+directory `dist`. Or drag the `dist/` folder into Netlify Drop for an instant URL.
 
 `vite.config.ts` sets `base: './'` and the app uses hash routing, so it works from a subdirectory
 without extra configuration.
+
+### 2. Install it
+
+1. Open the URL in **Safari** on your iPhone (Chrome on iOS cannot install PWAs).
+2. Share → **Add to Home Screen**.
+3. Open it from the home screen once while online, so the service worker caches everything.
+4. Turn on airplane mode and open it again to confirm it works offline.
+
+### Keeping your records
+
+Data is stored per-origin, so **keep the same URL** — moving hosts starts you with an empty
+database. Use export/import in Settings to carry records across.
+
+The app asks the browser to mark its storage persistent, and Settings shows whether that was
+granted. Installing to the home screen makes iOS more likely to grant it. Even so, iOS can clear
+site data, so **export a backup regularly** — that is the only real protection.
 
 ## Not included, deliberately
 

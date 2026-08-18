@@ -103,6 +103,14 @@ export function SettingsScreen() {
             Everything is stored on this device only. Browsers can clear their storage, so keep a
             backup somewhere you trust.
           </Hint>
+          {vm.storage === 'persistent' ? (
+            <Hint>Storage is marked persistent on this device.</Hint>
+          ) : vm.storage === 'best-effort' ? (
+            <Hint>
+              Storage is not marked persistent here, so the browser may clear it under pressure.
+              Adding the app to your home screen makes this more likely to be granted.
+            </Hint>
+          ) : null}
           <Button full onClick={() => void vm.exportData()}>
             Export a backup
           </Button>
