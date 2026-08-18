@@ -1,0 +1,22 @@
+.phases { display: flex; flex-direction: column; gap: 5px; }
+
+.phase {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 13px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  min-height: 44px;
+}
+
+.phase:disabled { opacity: 0.45; cursor: not-allowed; }
+.phaseOn { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+.phaseChapter { font-size: 0.75rem; color: var(--ink-faint); white-space: nowrap; }
+.hiddenInput { display: none; }
