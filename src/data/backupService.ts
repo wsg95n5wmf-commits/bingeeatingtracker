@@ -61,5 +61,4 @@ export async function importBackup(db: TrackerDatabase, backup: Backup): Promise
 
 export async function eraseEverything(db: TrackerDatabase): Promise<void> {
   await db.delete();
-  window.location.reload();
 }

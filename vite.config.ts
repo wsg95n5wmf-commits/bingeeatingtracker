@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { fileURLToPath, URL } from 'node:url';
 
+const isBeta = process.env.VITE_APP_ENV === 'beta';
+
 export default defineConfig({
   base: './',
   // Canonical dev-server port. Tool-specific launch configs derive from this.
@@ -21,8 +23,10 @@ export default defineConfig({
         navigateFallback: 'index.html',
       },
       manifest: {
-        name: 'Binge Eating Tracker',
-        short_name: 'Tracker',
+        // Distinct names and ids so an installed beta never merges with the
+        // installed production app on the home screen.
+        name: isBeta ? 'Tracker (Beta)' : 'Binge Eating Tracker',
+        short_name: isBeta ? 'Beta' : 'Tracker',
         description: 'A companion to the self-help program. Records only.',
         start_url: './',
         display: 'standalone',

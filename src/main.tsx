@@ -2,15 +2,16 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app/App';
 import { RepositoriesProvider } from './app/repositories';
-import { db } from './data/db/database';
+import { TrackerDatabase } from './data/db/database';
 import { createRepositories } from './data/repositories';
 import { requestPersistentStorage } from './app/storagePersistence';
+import { databaseName } from './app/environment';
 import './ui/theme/global.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('#root is missing from index.html');
 
-const repositories = createRepositories(db);
+const repositories = createRepositories(new TrackerDatabase(databaseName));
 
 function render(): void {
   createRoot(root as HTMLElement).render(

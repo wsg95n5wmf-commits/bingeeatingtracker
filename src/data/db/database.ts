@@ -22,7 +22,9 @@ export class TrackerDatabase extends Dexie {
   declare summaries: EntityTable<WeekSummary, 'weekStart'>;
   declare profile: EntityTable<StoredProfile, 'key'>;
 
-  constructor(name = 'binge-eating-tracker') {
+  // The name is supplied by the composition root, which knows which build
+  // this is. Beta and production share an origin and must not share a database.
+  constructor(name: string) {
     super(name);
     this.version(1).stores({
       episodes: 'id, date, [date+time]',
@@ -35,5 +37,3 @@ export class TrackerDatabase extends Dexie {
     });
   }
 }
-
-export const db = new TrackerDatabase();

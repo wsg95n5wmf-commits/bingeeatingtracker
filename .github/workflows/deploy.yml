@@ -1,11 +1,17 @@
-# Builds the app and publishes it to GitHub Pages on every push to main.
+# Publishes both builds to the single GitHub Pages site this repository gets:
 #
-# One-time setup: in the repository, Settings → Pages → Source → "GitHub Actions".
+#   main branch  ->  https://<user>.github.io/<repo>/
+#   beta branch  ->  https://<user>.github.io/<repo>/beta/
+#
+# Both are rebuilt on every run, so the published site always matches the two
+# branches. A push to one never publishes stale content for the other.
+#
+# One-time setup: Settings -> Pages -> Source -> "GitHub Actions".
 name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main, beta]
   workflow_dispatch:
 
 permissions:
@@ -13,7 +19,6 @@ permissions:
   pages: write
   id-token: write
 
-# Let a running deploy finish rather than cancelling it part-way.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -22,17 +27,53 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+
       - run: npm ci
       - run: npm test
-      - run: npm run build
+      - name: Build production
+        run: npm run build
+
+      - name: Stash the production build
+        run: mv dist "$RUNNER_TEMP/site"
+
+      - name: Does a beta branch exist?
+        id: beta
+        run: |
+          if git ls-remote --exit-code --heads origin beta >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "No beta branch yet — publishing production only."
+          fi
+
+      - name: Check out beta
+        if: steps.beta.outputs.exists == 'true'
+        run: |
+          git fetch origin beta --depth=1
+          git checkout --force origin/beta
+
+      - name: Build beta
+        if: steps.beta.outputs.exists == 'true'
+        env:
+          VITE_APP_ENV: beta
+        run: |
+          npm ci
+          npm test
+          npm run build
+          mv dist "$RUNNER_TEMP/site/beta"
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: ${{ runner.temp }}/site
 
   deploy:
     needs: build

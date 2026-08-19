@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { WEEKDAY_NAMES, type Weekday } from '@/domain/model/date';
 import { PHASES } from '@/domain/model/phase';
 import type { HeightUnit, WeightUnit } from '@/domain/model/units';
+import { environmentLabel, isBeta } from '@/app/environment';
 import { Button, Card, Empty, Field, Hint, Stack } from '@/ui/components/ui';
 import { useSettingsViewModel } from './useSettingsViewModel';
 import styles from './settings.module.css';
@@ -99,6 +100,12 @@ export function SettingsScreen() {
       <Card>
         <Stack>
           <h2>Your data</h2>
+          <Hint>
+            Build: <strong>{environmentLabel}</strong>.
+            {isBeta
+              ? ' These records are kept separately and the live app cannot see them.'
+              : ''}
+          </Hint>
           <Hint>
             Everything is stored on this device only. Browsers can clear their storage, so keep a
             backup somewhere you trust.

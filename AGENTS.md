@@ -33,6 +33,11 @@ These are not preferences. Violating one is a bug, regardless of what a task des
   or "anonymous usage stats". This app handles clinical-grade personal health data on a phone.
 - Reject any dependency that phones home. If unsure, check before adding it.
 - All data stays in IndexedDB on-device. No accounts, no sync, no cloud.
+- **Beta and production are served from the same origin, and IndexedDB is scoped to the origin,
+  not the path.** The database name in `src/app/environment.ts` is the only thing keeping the two
+  apart. Do not make it conditional on anything but `VITE_APP_ENV`, and do not let any layer other
+  than the composition root choose it — a beta build that opens the production database will
+  migrate and write real records.
 
 ### Copyright and the companion boundary
 
