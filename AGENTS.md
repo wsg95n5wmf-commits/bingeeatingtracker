@@ -216,32 +216,25 @@ Vitest, CSS Modules with design tokens. Add nothing else without a reason record
 ## 5. Git workflow
 
 Everything is promoted through the beta build before it reaches production. There are exactly two
-long-lived branches. **Both are protected on GitHub: neither accepts a direct push, and changes
-land only through a pull request.**
+long-lived branches, and **neither is ever written to directly**.
 
 ```
-work branch  --push-->  PR  -->  beta  --(tested on the beta URL)-->  PR  -->  main
-  (branch from beta)                                                   (promotion)
+work branch  --PR-->  beta  --(tested on the beta URL)-->  main
+   (branch from beta)         (promotion PR)
 ```
 
 | Branch | Publishes to | Receives work how |
 |---|---|---|
-| `beta` | `…/<repo>/beta/` | Only by merging a PR from a work branch |
-| `main` | `…/<repo>/` | Only by merging a PR from `beta` |
-
-Merging locally and pushing does not work and must not be attempted: `git push` to either branch
-is rejected by branch protection. Push the *work* branch and open a pull request against `beta`.
+| `beta` | `…/<repo>/beta/` | Only by merging a work branch |
+| `main` | `…/<repo>/` | Only by merging `beta` |
 
 ### The rules
 
-1. **Never commit or push directly to `beta` or `main`.** No exceptions, including one-line fixes,
+1. **Never commit directly to `beta` or `main`.** No exceptions, including one-line fixes,
    documentation, and reverts. If you are on either branch and about to commit, stop and branch.
-   Branch protection enforces this, so a direct push fails rather than doing damage — but do not
-   rely on the guard rail to catch you.
 2. **Branch from `beta`, never from `main`.** `beta` is always at or ahead of `main`, so branching
    from `main` produces a work branch missing whatever is still being tested.
-3. **Push the work branch and open a PR into `beta`.** Merging it there publishes it to the beta
-   URL. Do not merge locally: the push that would follow is rejected.
+3. **Merge the work branch into `beta` first.** That publishes it to the beta URL.
 4. **The user tests it there.** Do not open the promotion PR because the tests pass — passing tests
    are not the gate; the user having tried it in the beta build is.
 5. **Then promote `beta` into `main`** with its own PR. `main` receives nothing else, ever.
@@ -286,8 +279,6 @@ a judgement for an agent to make on its own.
 - Never merge your own PR unless asked.
 - Two PRs per change reach production: work branch into `beta`, then `beta` into `main`. The
   promotion PR needs no description beyond what it is promoting.
-- Merge with a **merge commit**. GitHub's button defaults to squash, which would rewrite the
-  commits and leave `beta` and `main` without shared history — see rule 6.
 
 ---
 
