@@ -53,8 +53,30 @@
 .stepper { display: flex; gap: 4px; }
 .stepper button { padding: 8px 12px; min-height: 40px; }
 
-.formGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+/*
+ * Grid items default to min-width:auto, so a 1fr column will not shrink below
+ * its content's intrinsic width — and iOS renders a native time input wide
+ * enough to burst out of it and overlap the next field. minmax gives the
+ * columns a floor they may fall back from, and auto-fit stacks them on very
+ * narrow screens instead of overflowing.
+ */
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+.formGrid > * { min-width: 0; }
+
+.formActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.formActions > * { min-width: 0; }
+
 .checks { display: flex; flex-wrap: wrap; gap: 14px; }
 .check { display: flex; align-items: center; gap: 7px; font-size: 0.875rem; }
-.check input { width: 20px; height: 20px; margin: 0; }
 .markPrompt { border-left: 3px solid var(--mark); padding-left: 11px; }
