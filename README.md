@@ -74,6 +74,10 @@ This repository publishes two builds to its single Pages site:
 
 Both are rebuilt on every deploy, so the site always matches the two branches.
 
+**Changes reach production only by promotion.** Branch from `beta`, merge the work branch into
+`beta`, try it on the beta URL, then merge `beta` into `main`. Neither long-lived branch is ever
+committed to directly. See [AGENTS.md](AGENTS.md) §5.
+
 **They share an origin, so they would share storage.** IndexedDB is scoped to the origin and not
 the path, which means a separate directory — or even a separate repository under the same
 `github.io` account — is not enough on its own. The builds therefore use different database names,
