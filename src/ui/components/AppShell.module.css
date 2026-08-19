@@ -39,3 +39,20 @@
 
 .tab[aria-current='page'] { color: var(--accent); background: var(--accent-soft); }
 .glyph { font-size: 1.1rem; line-height: 1; }
+
+/* Deliberately loud: logging real records into the beta by mistake would put
+   them in a database the live app never reads. */
+.betaBar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 6px 12px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--notice);
+  background: var(--notice-soft);
+  border-bottom: 1px solid var(--notice);
+}

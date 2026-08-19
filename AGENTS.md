@@ -33,6 +33,11 @@ These are not preferences. Violating one is a bug, regardless of what a task des
   or "anonymous usage stats". This app handles clinical-grade personal health data on a phone.
 - Reject any dependency that phones home. If unsure, check before adding it.
 - All data stays in IndexedDB on-device. No accounts, no sync, no cloud.
+- **Beta and production are served from the same origin, and IndexedDB is scoped to the origin,
+  not the path.** The database name in `src/app/environment.ts` is the only thing keeping the two
+  apart. Do not make it conditional on anything but `VITE_APP_ENV`, and do not let any layer other
+  than the composition root choose it — a beta build that opens the production database will
+  migrate and write real records.
 
 ### Copyright and the companion boundary
 
@@ -210,7 +215,34 @@ Vitest, CSS Modules with design tokens. Add nothing else without a reason record
 
 ## 5. Git workflow
 
-GitHub Flow: `main` is always deployable. Branch from `main`, open a PR, merge back.
+Everything is promoted through the beta build before it reaches production. There are exactly two
+long-lived branches, and **neither is ever written to directly**.
+
+```
+work branch  --PR-->  beta  --(tested on the beta URL)-->  main
+   (branch from beta)         (promotion PR)
+```
+
+| Branch | Publishes to | Receives work how |
+|---|---|---|
+| `beta` | `…/<repo>/beta/` | Only by merging a work branch |
+| `main` | `…/<repo>/` | Only by merging `beta` |
+
+### The rules
+
+1. **Never commit directly to `beta` or `main`.** No exceptions, including one-line fixes,
+   documentation, and reverts. If you are on either branch and about to commit, stop and branch.
+2. **Branch from `beta`, never from `main`.** `beta` is always at or ahead of `main`, so branching
+   from `main` produces a work branch missing whatever is still being tested.
+3. **Merge the work branch into `beta` first.** That publishes it to the beta URL.
+4. **The user tests it there.** Do not open the promotion PR because the tests pass — passing tests
+   are not the gate; the user having tried it in the beta build is.
+5. **Then promote `beta` into `main`** with its own PR. `main` receives nothing else, ever.
+6. **Promotions are merge commits.** Never squash or rebase a promotion, and never squash-merge a
+   PR into `beta`. Squashing rewrites the commits so `beta` and `main` no longer share history, and
+   every later promotion then arrives as a conflict. This follows from "additive only" below; it is
+   restated here because squash-merging is the default on GitHub's merge button.
+7. **A revert is a change like any other.** Branch from `beta`, revert there, promote.
 
 ### Branch naming
 Conventional Branch — `<type>/<short-description>`, lowercase kebab-case, descriptive.
@@ -218,13 +250,18 @@ Conventional Branch — `<type>/<short-description>`, lowercase kebab-case, desc
 | Type | For |
 |---|---|
 | `feature/` | New functionality |
-| `bugfix/` | Fixing a bug on `main` |
-| `hotfix/` | Urgent production fix |
+| `bugfix/` | Fixing a bug |
+| `hotfix/` | Urgent production fix — still goes through `beta`, just promoted immediately |
 | `refactor/` | Restructuring with no behaviour change |
 | `docs/` | Documentation only |
 | `chore/` | Tooling, deps, config |
 
 Examples: `feature/monitoring-record`, `bugfix/weigh-day-off-by-one`, `docs/spec-review-sessions`.
+
+Note what rule 1 costs: an urgent production fix cannot skip the beta. That is the deliberate
+trade — this app holds clinical-grade personal records, and an untested write path can corrupt
+them. If a fix ever genuinely must bypass `beta`, that is the user's call to make explicitly, not
+a judgement for an agent to make on its own.
 
 ### Commit rules
 - **No force push.** Never `git push --force` or `--force-with-lease`, on any branch.
@@ -240,6 +277,8 @@ Examples: `feature/monitoring-record`, `bugfix/weigh-day-off-by-one`, `docs/spec
 - One PR per logical change. Description states what changed and why, and links the SPEC.md section.
 - A PR that changes behaviour updates SPEC.md in the same PR.
 - Never merge your own PR unless asked.
+- Two PRs per change reach production: work branch into `beta`, then `beta` into `main`. The
+  promotion PR needs no description beyond what it is promoting.
 
 ---
 

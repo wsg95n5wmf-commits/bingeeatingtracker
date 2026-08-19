@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useRepositories } from '@/app/repositories';
-import { db } from '@/data/db/database';
-import { eraseEverything, exportBackup, importBackup } from '@/data/backupService';
 import type { Weekday } from '@/domain/model/date';
 import type { Phase } from '@/domain/model/phase';
 import type { Profile } from '@/domain/model/profile';
@@ -11,7 +9,7 @@ import { backupFilename, parseBackup, BackupFormatError } from '@/domain/usecase
 import { storageStatus, type StorageStatus } from '@/app/storagePersistence';
 
 export function useSettingsViewModel() {
-  const { profile } = useRepositories();
+  const { profile, backup } = useRepositories();
   const current = useLiveQuery(() => profile.get());
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [storage, setStorage] = useState<StorageStatus>('unknown');
@@ -33,8 +31,8 @@ export function useSettingsViewModel() {
    * device — nothing is uploaded anywhere.
    */
   const exportData = useCallback(async () => {
-    const backup = await exportBackup(db);
-    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const contents = await backup.export();
+    const blob = new Blob([JSON.stringify(contents, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -42,12 +40,11 @@ export function useSettingsViewModel() {
     link.click();
     URL.revokeObjectURL(url);
     setMessage('Backup saved.');
-  }, []);
+  }, [backup]);
 
   const importData = useCallback(async (file: File) => {
     try {
-      const backup = parseBackup(JSON.parse(await file.text()));
-      await importBackup(db, backup);
+      await backup.restore(parseBackup(JSON.parse(await file.text())));
       setMessage('Backup restored.');
     } catch (error) {
       setMessage(
@@ -56,7 +53,7 @@ export function useSettingsViewModel() {
           : 'That file could not be read as a backup.',
       );
     }
-  }, []);
+  }, [backup]);
 
   return {
     profile: current,
@@ -70,6 +67,9 @@ export function useSettingsViewModel() {
     setHeightUnit: (heightUnit: HeightUnit) => void update({ heightUnit }),
     exportData,
     importData,
-    eraseEverything: () => void eraseEverything(db),
+    eraseEverything: () => {
+      // Reload so every view model drops its handle to the deleted database.
+      void backup.eraseEverything().then(() => window.location.reload());
+    },
   } as const;
 }

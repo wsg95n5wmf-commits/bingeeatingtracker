@@ -1,5 +1,6 @@
 import type { Repositories } from '@/domain/repositories';
 import type { TrackerDatabase } from '../db/database';
+import { createBackupRepository } from './backupRepository';
 import { createEpisodeRepository } from './episodeRepository';
 import { createPlanRepository } from './planRepository';
 import { createProfileRepository } from './profileRepository';
@@ -15,5 +16,6 @@ export function createRepositories(db: TrackerDatabase): Repositories {
     profile: createProfileRepository(db),
     reviews: createReviewRepository(db),
     summaries: createSummaryRepository(db),
+    backup: createBackupRepository(db),
   };
 }

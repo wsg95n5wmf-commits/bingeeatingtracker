@@ -63,6 +63,34 @@ directory `dist`. Or drag the `dist/` folder into Netlify Drop for an instant UR
 `vite.config.ts` sets `base: './'` and the app uses hash routing, so it works from a subdirectory
 without extra configuration.
 
+### Beta and production
+
+This repository publishes two builds to its single Pages site:
+
+| Branch | URL | Database |
+|---|---|---|
+| `main` | `https://<user>.github.io/<repo>/` | `binge-eating-tracker` |
+| `beta` | `https://<user>.github.io/<repo>/beta/` | `binge-eating-tracker-beta` |
+
+Both are rebuilt on every deploy, so the site always matches the two branches.
+
+**Changes reach production only by promotion.** Branch from `beta`, merge the work branch into
+`beta`, try it on the beta URL, then merge `beta` into `main`. Neither long-lived branch is ever
+committed to directly. See [AGENTS.md](AGENTS.md) §5.
+
+**They share an origin, so they would share storage.** IndexedDB is scoped to the origin and not
+the path, which means a separate directory — or even a separate repository under the same
+`github.io` account — is not enough on its own. The builds therefore use different database names,
+set from `VITE_APP_ENV` at build time. The beta carries a banner and installs under its own name,
+so the two never merge on a home screen.
+
+To test the beta against realistic data, export a backup from production and import it into the
+beta. Nothing you do in the beta can reach the real records.
+
+```bash
+VITE_APP_ENV=beta npm run build
+```
+
 ### 2. Install it
 
 1. Open the URL in **Safari** on your iPhone (Chrome on iOS cannot install PWAs).

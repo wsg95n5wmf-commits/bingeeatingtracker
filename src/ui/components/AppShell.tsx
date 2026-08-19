@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import { isBeta } from '@/app/environment';
 import styles from './AppShell.module.css';
 
 const TABS = [
@@ -12,6 +13,11 @@ const TABS = [
 export function AppShell() {
   return (
     <div className={styles.shell}>
+      {isBeta ? (
+        <p className={styles.betaBar}>
+          Beta — separate records from the live app
+        </p>
+      ) : null}
       <main className={styles.main}>
         <Outlet />
       </main>

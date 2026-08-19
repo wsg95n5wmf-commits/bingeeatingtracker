@@ -6,6 +6,7 @@ import type { Profile } from '../model/profile';
 import type { ReviewSession } from '../model/review';
 import type { WeekSummary } from '../model/summary';
 import type { Weighing } from '../model/weighing';
+import type { Backup } from '../usecases/backup';
 
 export interface EpisodeRepository {
   forDate(date: LocalDate): Promise<Episode[]>;
@@ -56,6 +57,15 @@ export interface SummaryRepository {
   save(summary: WeekSummary): Promise<void>;
 }
 
+export interface BackupRepository {
+  /** Everything on this device, in one serialisable object. */
+  export(): Promise<Backup>;
+  /** Replaces everything. Atomic: a failure leaves the existing records intact. */
+  restore(backup: Backup): Promise<void>;
+  /** Deletes every record. Irreversible. */
+  eraseEverything(): Promise<void>;
+}
+
 /** Everything the use cases need, wired at the composition root. */
 export interface Repositories {
   readonly episodes: EpisodeRepository;
@@ -64,4 +74,5 @@ export interface Repositories {
   readonly profile: ProfileRepository;
   readonly reviews: ReviewRepository;
   readonly summaries: SummaryRepository;
+  readonly backup: BackupRepository;
 }
