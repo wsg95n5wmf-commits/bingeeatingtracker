@@ -1,4 +1,8 @@
 :root {
+  /* Native controls — checkboxes, date and time pickers, select arrows,
+     scrollbars — follow the theme instead of rendering light-on-dark. */
+  color-scheme: light dark;
+
   --paper: #faf9f7;
   --card: #ffffff;
   --ink: #22201d;
