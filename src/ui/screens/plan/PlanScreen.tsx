@@ -70,42 +70,48 @@ export function PlanScreen() {
 
                   <div className={styles.item}>
                     <input
-                      type="time"
-                      value={item.time}
-                      aria-label={`Time for ${item.label}`}
+                      type="text"
+                      className={styles.name}
+                      value={item.label}
+                      aria-label="Name"
                       onChange={(event) =>
-                        vm.updateItem(item.id as PlannedItemId, {
-                          time: event.target.value as TimeOfDay,
-                        })
+                        vm.updateItem(item.id as PlannedItemId, { label: event.target.value })
                       }
                     />
-                    <div>
+                    <div className={styles.itemControls}>
                       <input
-                        type="text"
-                        value={item.label}
-                        aria-label="Name"
+                        type="time"
+                        className={styles.time}
+                        value={item.time}
+                        aria-label={`Time for ${item.label}`}
                         onChange={(event) =>
-                          vm.updateItem(item.id as PlannedItemId, { label: event.target.value })
+                          vm.updateItem(item.id as PlannedItemId, {
+                            time: event.target.value as TimeOfDay,
+                          })
                         }
                       />
+                      <div className={styles.kindGroup} role="group" aria-label="Meal or snack">
+                        {(['meal', 'snack'] as const).map((kind) => (
+                          <button
+                            key={kind}
+                            type="button"
+                            aria-pressed={item.kind === kind}
+                            className={`${styles.kindOption} ${item.kind === kind ? styles.kindOn : ''}`}
+                            onClick={() => vm.setKind(item.id as PlannedItemId, kind)}
+                          >
+                            {kind === 'meal' ? 'Meal' : 'Snack'}
+                          </button>
+                        ))}
+                      </div>
                       <button
                         type="button"
-                        className={styles.kind}
-                        onClick={() =>
-                          vm.setKind(item.id as PlannedItemId, item.kind === 'meal' ? 'snack' : 'meal')
-                        }
+                        className={styles.remove}
+                        aria-label={`Remove ${item.label}`}
+                        onClick={() => vm.removeItem(item.id as PlannedItemId)}
                       >
-                        {item.kind === 'meal' ? 'Meal' : 'Snack'}
+                        ✕
                       </button>
                     </div>
-                    <button
-                      type="button"
-                      className={styles.remove}
-                      aria-label={`Remove ${item.label}`}
-                      onClick={() => vm.removeItem(item.id as PlannedItemId)}
-                    >
-                      ✕
-                    </button>
                   </div>
                 </Fragment>
               );
