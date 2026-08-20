@@ -37,6 +37,9 @@
   display: flex;
   flex: 1 1 auto;
   min-width: 0;
+  /* Matches the control height; the border is inside it, so the options
+     stretch to fill rather than adding to it. */
+  height: 44px;
   border: 1px solid var(--rule-strong);
   border-radius: var(--radius-sm);
   overflow: hidden;
@@ -45,7 +48,6 @@
 .kindOption {
   flex: 1 1 0;
   min-width: 0;
-  min-height: 38px;
   padding: 8px 4px;
   border: 0;
   background: transparent;
@@ -65,8 +67,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);

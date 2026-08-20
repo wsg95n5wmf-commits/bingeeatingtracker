@@ -43,11 +43,17 @@
 .full { width: 100%; }
 
 .label {
-  display: block;
+  /* A column, not a block: the control must sit on its own line rather than
+     share a text baseline with the label, which left controls in adjacent
+     columns misaligned by the label's descender space. */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  min-width: 0;
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--ink-soft);
-  margin-bottom: 5px;
 }
 
 .hint { font-size: 0.8125rem; color: var(--ink-faint); }

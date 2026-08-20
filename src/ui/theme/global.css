@@ -62,6 +62,11 @@ textarea {
   padding: 10px 12px;
   font-size: 16px;
   line-height: 1.35;
+  /* One height for every control. Native pickers size their own shadow content
+     and end up a couple of pixels taller than a plain field, which left
+     neighbouring controls visibly uneven. 44px is also the minimum comfortable
+     touch target. */
+  min-height: 44px;
   border: 1px solid var(--rule-strong);
   border-radius: var(--radius-sm);
   background: var(--card);
@@ -75,11 +80,19 @@ textarea { resize: vertical; min-height: 76px; }
  * specificity above the single-class overrides screens use to size their own
  * inputs — which silently stretched the plan screen's time field full width.
  */
+/* Native pickers lay out their own shadow content and overshoot min-height,
+   so they are pinned to the shared height outright. */
+input[type='time'],
+input[type='date'] {
+  height: 44px;
+}
+
 input[type='checkbox'],
 input[type='radio'] {
   accent-color: var(--accent);
   width: 20px;
   height: 20px;
+  min-height: 0;
   padding: 0;
   margin: 0;
   flex: 0 0 auto;

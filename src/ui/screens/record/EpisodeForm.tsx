@@ -144,7 +144,7 @@ export function EpisodeForm({
           ) : null}
         </div>
 
-        <div className={styles.formGrid}>
+        <div className={styles.formActions}>
           <Button onClick={onCancel}>Cancel</Button>
           <Button variant="primary" onClick={submit} disabled={description.trim() === ''}>
             {existing ? 'Save' : 'Add entry'}
