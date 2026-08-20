@@ -34,8 +34,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          # Kept in step with .nvmrc and the engines field in package.json.
-          node-version-file: .nvmrc
+          node-version: 22
           cache: npm
 
       - run: npm ci
