@@ -21,9 +21,6 @@ The flip side: browsers can clear their own storage, and clearing site data dele
 
 ## Running it
 
-Node **24 LTS** — the version is in `.nvmrc`, so `nvm use` / `fnm use` picks it
-up, and CI reads the same file.
-
 ```bash
 npm install
 ```
