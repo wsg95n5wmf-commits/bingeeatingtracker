@@ -9,3 +9,6 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/** ISO timestamp of the build, injected by Vite. */
+declare const __BUILD_TIME__: string;

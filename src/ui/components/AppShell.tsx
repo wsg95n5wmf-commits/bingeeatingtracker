@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { isBeta } from '@/app/environment';
+import { installUpdate, subscribeToUpdates } from '@/app/appUpdate';
 import styles from './AppShell.module.css';
 
 const TABS = [
@@ -11,8 +13,19 @@ const TABS = [
 ] as const;
 
 export function AppShell() {
+  const [updateReady, setUpdateReady] = useState(false);
+  useEffect(() => subscribeToUpdates(setUpdateReady), []);
+
   return (
     <div className={styles.shell}>
+      {updateReady ? (
+        <div className={styles.updateBar}>
+          <span>A new version is ready.</span>
+          <button type="button" className={styles.updateButton} onClick={installUpdate}>
+            Restart
+          </button>
+        </div>
+      ) : null}
       {isBeta ? (
         <p className={styles.betaBar}>
           Beta — separate records from the live app

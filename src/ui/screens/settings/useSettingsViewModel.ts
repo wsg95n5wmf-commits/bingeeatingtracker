@@ -7,6 +7,7 @@ import type { Profile } from '@/domain/model/profile';
 import type { HeightUnit, WeightUnit } from '@/domain/model/units';
 import { backupFilename, parseBackup, BackupFormatError } from '@/domain/usecases/backup';
 import { storageStatus, type StorageStatus } from '@/app/storagePersistence';
+import { checkForUpdate } from '@/app/appUpdate';
 
 export function useSettingsViewModel() {
   const { profile, backup } = useRepositories();
@@ -55,10 +56,17 @@ export function useSettingsViewModel() {
     }
   }, [backup]);
 
+  const lookForUpdate = useCallback(async () => {
+    await checkForUpdate();
+    setMessage('Checked for updates. If one was found, a bar appears at the top.');
+  }, []);
+
   return {
     profile: current,
     message,
     storage,
+    buildTime: __BUILD_TIME__,
+    lookForUpdate,
     fileInput,
     setPhase: (phase: Phase) => void update({ phase }),
     setWeighDay: (weighDay: Weekday) => void update({ weighDay }),
