@@ -59,6 +59,9 @@ input,
 select,
 textarea {
   width: 100%;
+  /* Native pickers carry an intrinsic minimum width. Without this they refuse
+     to shrink and spill out of whatever column they are placed in. */
+  min-width: 0;
   padding: 10px 12px;
   font-size: 16px;
   line-height: 1.35;
@@ -80,13 +83,6 @@ textarea { resize: vertical; min-height: 76px; }
  * specificity above the single-class overrides screens use to size their own
  * inputs — which silently stretched the plan screen's time field full width.
  */
-/* Native pickers lay out their own shadow content and overshoot min-height,
-   so they are pinned to the shared height outright. */
-input[type='time'],
-input[type='date'] {
-  height: 44px;
-}
-
 input[type='checkbox'],
 input[type='radio'] {
   accent-color: var(--accent);

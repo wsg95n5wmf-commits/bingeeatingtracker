@@ -18,7 +18,7 @@
 
 .itemControls {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 8px;
 }
 
@@ -37,9 +37,7 @@
   display: flex;
   flex: 1 1 auto;
   min-width: 0;
-  /* Matches the control height; the border is inside it, so the options
-     stretch to fill rather than adding to it. */
-  height: 44px;
+  min-height: 44px;
   border: 1px solid var(--rule-strong);
   border-radius: var(--radius-sm);
   overflow: hidden;
@@ -68,7 +66,7 @@
   align-items: center;
   justify-content: center;
   width: 44px;
-  height: 44px;
+  min-height: 44px;
   padding: 0;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
