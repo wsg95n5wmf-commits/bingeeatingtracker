@@ -83,6 +83,21 @@ textarea { resize: vertical; min-height: 76px; }
  * specificity above the single-class overrides screens use to size their own
  * inputs — which silently stretched the plan screen's time field full width.
  */
+/*
+ * Sized to its own content rather than stretched across the row.
+ *
+ * Fields sit in a flex column whose items stretch, which suits a text box but
+ * leaves a native picker far wider than the value it holds — and WebKit centres
+ * that value inside whatever width it is given, so the reading ends up marooned
+ * with blank space either side. text-align does not apply to these controls.
+ */
+input[type='time'],
+input[type='date'] {
+  align-self: flex-start;
+  width: min-content;
+  max-width: 100%;
+}
+
 input[type='checkbox'],
 input[type='radio'] {
   accent-color: var(--accent);
