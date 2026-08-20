@@ -56,3 +56,30 @@
   background: var(--notice-soft);
   border-bottom: 1px solid var(--notice);
 }
+
+.updateBar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 12px;
+  font-size: 0.8125rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-bottom: 1px solid var(--accent);
+}
+
+.updateButton {
+  padding: 6px 14px;
+  min-height: 32px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}

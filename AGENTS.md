@@ -284,6 +284,10 @@ a judgement for an agent to make on its own.
 - One PR per logical change. Description states what changed and why, and links the SPEC.md section.
 - A PR that changes behaviour updates SPEC.md in the same PR.
 - Never merge your own PR unless asked.
+- **Check the base branch before opening a PR.** GitHub preselects the repository's default
+  branch, which is `main`. A work branch must target `beta`; `main` is the base only for the
+  promotion PR. A work branch merged straight into `main` puts untested code in production and
+  takes a revert plus a fresh PR to undo.
 - Two PRs per change reach production: work branch into `beta`, then `beta` into `main`. The
   promotion PR needs no description beyond what it is promoting.
 - Merge with a **merge commit**. GitHub's button defaults to squash, which would rewrite the

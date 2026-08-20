@@ -100,12 +100,9 @@ export function SettingsScreen() {
       <Card>
         <Stack>
           <h2>Your data</h2>
-          <Hint>
-            Build: <strong>{environmentLabel}</strong>.
-            {isBeta
-              ? ' These records are kept separately and the live app cannot see them.'
-              : ''}
-          </Hint>
+          {isBeta ? (
+            <Hint>These records are kept separately and the live app cannot see them.</Hint>
+          ) : null}
           <Hint>
             Everything is stored on this device only. Browsers can clear their storage, so keep a
             backup somewhere you trust.
@@ -136,6 +133,22 @@ export function SettingsScreen() {
             }}
           />
           {vm.message ? <Hint>{vm.message}</Hint> : null}
+        </Stack>
+      </Card>
+
+      <Card>
+        <Stack>
+          <h2>Version</h2>
+          <Hint>
+            Build: <strong>{environmentLabel}</strong>, {new Date(vm.buildTime).toLocaleString()}
+          </Hint>
+          <Button full onClick={() => void vm.lookForUpdate()}>
+            Check for updates
+          </Button>
+          <Hint>
+            The app looks for a new version whenever you open it. Updates are never applied while
+            you are in the middle of something — you are asked first.
+          </Hint>
         </Stack>
       </Card>
 

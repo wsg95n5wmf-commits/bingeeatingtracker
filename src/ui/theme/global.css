@@ -14,6 +14,9 @@ body,
 
 body {
   margin: 0;
+  /* Removes the 300ms double-tap-to-zoom gesture, so taps register at once. */
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
@@ -41,21 +44,59 @@ button,
 input,
 select,
 textarea {
-  font: inherit;
+  font-family: inherit;
   color: inherit;
 }
 
+/*
+ * 16px is a hard floor, never inherited.
+ *
+ * iOS Safari zooms the page whenever a focused control's text is smaller than
+ * 16px. Field labels are 13px and wrap their input, so `font: inherit` was
+ * silently making every input 13px and triggering that zoom on every tap.
+ */
 input,
 select,
 textarea {
   width: 100%;
   padding: 10px 12px;
+  font-size: 16px;
+  line-height: 1.35;
+  /* One height for every control. Native pickers size their own shadow content
+     and end up a couple of pixels taller than a plain field, which left
+     neighbouring controls visibly uneven. 44px is also the minimum comfortable
+     touch target. */
+  min-height: 44px;
   border: 1px solid var(--rule-strong);
   border-radius: var(--radius-sm);
   background: var(--card);
 }
 
 textarea { resize: vertical; min-height: 76px; }
+
+/*
+ * Checkboxes and radios undo the text-field rule above. Done with an attribute
+ * selector rather than :not() on that rule, because :not() would raise its
+ * specificity above the single-class overrides screens use to size their own
+ * inputs — which silently stretched the plan screen's time field full width.
+ */
+/* Native pickers lay out their own shadow content and overshoot min-height,
+   so they are pinned to the shared height outright. */
+input[type='time'],
+input[type='date'] {
+  height: 44px;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--accent);
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  flex: 0 0 auto;
+}
 
 input:focus-visible,
 select:focus-visible,

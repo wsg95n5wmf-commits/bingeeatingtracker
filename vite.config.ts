@@ -9,13 +9,18 @@ export default defineConfig({
   base: './',
   // Canonical dev-server port. Tool-specific launch configs derive from this.
   server: { port: 5173 },
+  // Lets the app show which build is running, so an update can be confirmed.
+  define: { __BUILD_TIME__: JSON.stringify(new Date().toISOString()) },
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // 'prompt', not 'autoUpdate': the app offers the update and the user
+      // chooses when to restart, so a reload never lands mid-entry.
+      registerType: 'prompt',
+      injectRegister: null,
       includeAssets: ['icon.svg'],
       workbox: {
         // Offline-first: every built asset is precached, so the app runs with no network.
