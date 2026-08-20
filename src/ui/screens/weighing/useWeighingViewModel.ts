@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useRepositories } from '@/app/repositories';
 import { WEEKDAY_NAMES, toLocalDate, type LocalDate, type Weekday } from '@/domain/model/date';
-import { weightToGrams, type WeightUnit } from '@/domain/model/units';
+import { parseDecimalInput, weightToGrams, type WeightUnit } from '@/domain/model/units';
 import { buildTrend, isWeighDay, type WeightTrend } from '@/domain/usecases/weighing';
 import type { Weighing } from '@/domain/model/weighing';
 
@@ -52,8 +52,8 @@ export function useWeighingViewModel() {
    */
   const record = useCallback(async () => {
     if (!data) return;
-    const value = Number(entry);
-    if (!Number.isFinite(value) || value <= 0) return;
+    const value = parseDecimalInput(entry);
+    if (value === undefined || value <= 0) return;
     await weighings.save({
       date: today,
       weightGrams: weightToGrams(value, data.profile.weightUnit),
@@ -62,5 +62,12 @@ export function useWeighingViewModel() {
     setEntry('');
   }, [data, entry, today, weighings]);
 
-  return { state, entry, setEntry, record } as const;
+  return {
+    state,
+    entry,
+    setEntry,
+    /** False while the entry is empty or not yet a number the app can read. */
+    canRecord: (parseDecimalInput(entry) ?? 0) > 0,
+    record,
+  } as const;
 }

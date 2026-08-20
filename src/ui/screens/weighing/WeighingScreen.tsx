@@ -7,7 +7,7 @@ import { useWeighingViewModel } from './useWeighingViewModel';
 import styles from './weighing.module.css';
 
 export function WeighingScreen() {
-  const { state, entry, setEntry, record } = useWeighingViewModel();
+  const { state, entry, setEntry, canRecord, record } = useWeighingViewModel();
   if (state.status === 'loading') return <Empty>Opening weighing…</Empty>;
 
   const remaining = READINGS_BEFORE_A_TREND - state.trend.points.length;
@@ -31,17 +31,22 @@ export function WeighingScreen() {
             <>
               <div className={styles.entryRow}>
                 <Field label={`Weight (${state.unit})`}>
+                  {/*
+                    Deliberately a text field. type="number" refuses a comma in
+                    locales that use one and hands back an empty string, so the
+                    entry vanishes as it is typed. inputMode keeps the numeric
+                    keypad; the value is parsed in the view model.
+                  */}
                   <input
-                    type="number"
+                    type="text"
                     inputMode="decimal"
-                    step="0.1"
-                    min="0"
+                    autoComplete="off"
                     value={entry}
                     onChange={(event) => setEntry(event.target.value)}
-                    placeholder="0.0"
+                    placeholder={(0).toLocaleString(undefined, { minimumFractionDigits: 1 })}
                   />
                 </Field>
-                <Button variant="primary" onClick={() => void record()} disabled={entry.trim() === ''}>
+                <Button variant="primary" onClick={() => void record()} disabled={!canRecord}>
                   Record
                 </Button>
               </div>

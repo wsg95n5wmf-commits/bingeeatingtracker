@@ -5,6 +5,7 @@ import {
   gramsToWeight,
   grams,
   heightToCentimetres,
+  parseDecimalInput,
   weightToGrams,
 } from '../units';
 
@@ -22,8 +23,8 @@ describe('weight conversion', () => {
     expect(gramsToWeight(grams(72_575), 'lb')).toBe(160);
   });
 
-  it('formats with the unit', () => {
-    expect(formatWeight(grams(72_000), 'kg')).toBe('72.0 kg');
+  it('formats with the unit, in whichever decimal separator the locale uses', () => {
+    expect(formatWeight(grams(72_000), 'kg')).toMatch(/^72[.,]0 kg$/);
   });
 
   it('survives a round trip through either unit without drifting', () => {
@@ -56,5 +57,40 @@ describe('height conversion', () => {
 
   it('reads centimetres back as feet and inches', () => {
     expect(centimetresToFeetInches(175 as never)).toEqual({ feet: 5, inches: 9 });
+  });
+});
+
+describe('reading a number the user typed', () => {
+  it('accepts a comma as the decimal separator', () => {
+    expect(parseDecimalInput('72,4')).toBe(72.4);
+  });
+
+  it('accepts a full stop just the same', () => {
+    expect(parseDecimalInput('72.4')).toBe(72.4);
+  });
+
+  it('accepts a whole number', () => {
+    expect(parseDecimalInput('72')).toBe(72);
+  });
+
+  it('ignores surrounding whitespace', () => {
+    expect(parseDecimalInput('  72,4  ')).toBe(72.4);
+  });
+
+  it('rejects an empty entry', () => {
+    expect(parseDecimalInput('')).toBeUndefined();
+    expect(parseDecimalInput('   ')).toBeUndefined();
+  });
+
+  it('rejects anything that is not a plain number', () => {
+    for (const bad of ['abc', '72kg', '7,2,4', '1 234,5', '-72', '+72', '72,4e3']) {
+      expect(parseDecimalInput(bad)).toBeUndefined();
+    }
+  });
+
+  it('survives a round trip into stored grams', () => {
+    const typed = parseDecimalInput('72,4');
+    expect(typed).toBeDefined();
+    expect(gramsToWeight(weightToGrams(typed as number, 'kg'), 'kg')).toBe(72.4);
   });
 });
